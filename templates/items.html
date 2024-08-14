@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Товары</title>
+</head>
+<style>
+    body {background: aliceblue}
+    .table{margin-bottom: 10%;}
+    th {border: 1px solid black;}
+    td {border: 1px solid black;}
+    .line {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .line th, .line td {
+      text-align: center;
+      padding: 8px;
+    }
+    .line th {
+      background-color: #f2f2f2;
+    }
+</style>
+<script>
+    function itemDelete(id){
+        fetch(`/delete_item/${id}/`, { method: "DELETE" }).then(()=>location.reload())
+    }
+</script>
+<body>
+<h1>Список всех товаров сети магазинов</h1>
+<div class="table">
+    <table class="line">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Редактировать</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%  for item in all_items %}
+                <tr>
+                    <td> {{ item.name }} </td>
+                    <td> {{ item.description }} </td>
+                    <td> {{ item.price }} р. </td>
+                    <td> {{ item.sum}} шт. </td>
+                    <td> <a href="/items/{{ item.id }}/"> <button> v </button></a></td>
+                    <td> <button onclick="itemDelete({{ item.id }})"> x </button> </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<hr>
+<div>
+    <h2>Добавить товар:</h2>
+    <form method="post" action="/items/">
+        {% csrf_token %}
+        <div  style="display: grid; width: 500px">
+        {% for field in form %}
+            <div style="grid-column: 1">
+                {{field.label_tag}}
+            </div>
+            <div style="grid-column: 2">
+                {{ field }}
+            </div>
+            
+        {% endfor %}
+        </div>
+        <input type="submit" value="Добавить">
+    </form>
+</div>
+<div style="margin: 7% 0 0 ">
+    <a href='/main'> <button> Вернуться на главную страницу </button></a>
+</div>
+</body>
+</html>

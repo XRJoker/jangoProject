@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Товар</title>
+</head>
+<style>
+    body {background: aliceblue}
+</style>
+<body>
+
+<div>
+    <h2>Редактировать товар:</h2>
+    <form method="post">
+        <input type="hidden" value="item" name="type">
+        {% csrf_token %}
+        <div  style="display: grid; width: 400px">
+            {% for item_field in item %}
+                <div style="grid-column: 1">
+                    {{ item_field.label_tag }}
+                </div>
+                <div style="grid-column: 2">
+                    {{ item_field }}
+                </div>
+            {% endfor %}
+        </div>
+        <input type="submit" value="Редактировать">
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> {{ store.name }} </title>
+</head>
+<style>
+    body {background: aliceblue}
+    .table{margin-bottom: 10%;}
+    th {border: 1px solid black;}
+    td {border: 1px solid black;}
+    .line {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .line th, .line td {
+      text-align: center;
+      padding: 8px;
+    }
+    .line th {
+      background-color: #f2f2f2;
+    }
+    form {
+        margin-bottom: 2%;
+    }
+    
+
+</style>
+<script>
+    function handleDelete(id){
+        fetch(`/delete_store_item/${id}/`, { method: "DELETE" }).then(()=>location.reload())
+    }
+</script>
+<body>
+<br>
+<div>
+    {%  for list_store in all_stores %}
+        <a href='/store/{{ list_store.id }}/'> <button {% if list_store.id == store.id %} disabled {% endif %}>{{ list_store.name }} </button></a>
+    {% endfor %}
+</div>
+
+<div class="form">
+    <h2>Добавить новый магазин:</h2>
+    <form method="post" style="display: grid; width: fit-content">
+        {% csrf_token %}
+        {{ form }}
+        <input type="hidden" value="store" name="type">
+        <input style="grid-column: 2" type="submit" value="Добавить" style="display: inline">
+    </form>
+</div>
+
+<hr>
+
+<h1> {{ store.name }} </h1>
+<div class="table">
+<table class="line">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%  for item in store.items.all %}
+                <tr>
+                    <td> {{ item.item.name }} </td>
+                    <td> {{ item.item.description }} </td>
+                    <td> {{ item.item.price }} р. </td>
+                    <td> {{ item.amount }} шт. </td>
+                    <td> <button onclick="handleDelete({{ item.id }})"> x </button> </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<hr>
+
+<div>
+    <h2>Добавить товар:</h2>
+    <form method="post">
+        <input type="hidden" value="item" name="type">
+        {% csrf_token %}
+        <div  style="display: grid; width: 300px">
+            {% for item_field in item_form.visible_fields %}
+                <div style="grid-column: 1">
+                    {{ item_field.label_tag }}
+                </div>
+                <div style="grid-column: 2">
+                    {{ item_field }}
+                </div>
+                
+            {% endfor %}
+        {% for item_field in item_form.hidden_fields %}
+            {{ item_field }}
+        {% endfor %}
+        </div>
+        <input type="submit" value="Добавить">
+    </form>
+</div>
+
+<div style="margin: 10% 0 0 ">
+    <a href='/main'> <button> Вернуться на главную страницу </button></a>
+</div>
+
+</body>
+</html>

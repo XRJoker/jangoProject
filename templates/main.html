@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+</head>
+<style>
+    body {background: aliceblue}
+
+</style>
+<body>
+<h1>Список магазинов:</h1>
+
+<div>
+    {%  for list_store in all_stores %}
+        <a href='/store/{{ list_store.id }}/'> <button > {{ list_store.name }} </button></a>
+    {% endfor %}
+</div>
+
+<br>
+<h1>Список товаров:</h1>
+<a href='/items'> <button> Список товаров сети магазинов </button></a>
+
+<h2> </h2>
+</body>
+</html>
